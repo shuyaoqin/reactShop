@@ -20,10 +20,10 @@ export default class HomeComponent extends React.Component {
 
     }
     componentDidMount() {
-
+        this.handleNavStyle(this.props);
     }
     componentWillReceiveProps(newProps) {
-        this.handleNavStyle(newProps);
+        // this.handleNavStyle(newProps);
     }
     goPage(pUrl) {
         this.props.history.replace(config.path+pUrl);

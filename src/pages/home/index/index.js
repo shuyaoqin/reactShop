@@ -85,12 +85,15 @@ export default class IndexComponent extends React.Component {
             }
         })
     }
+    pushPage(pUrl) {
+        this.props.history.push(config.path + pUrl);
+    }
     render() {
         return (
             <div>
                 {/* 首页头部 */}
-                <div className={this.state.bScroll ? Css['search-header'] + '' + Css['red-bg']: Css['search-header']}>
-                    <div className={Css['classify-icon']}></div>
+                <div className={this.state.bScroll ? Css['search-header'] + ' ' + Css['red-bg']: Css['search-header']}>
+                    <div className={Css['classify-icon']} onClick={this.pushPage.bind(this, '/goods/classify')}></div>
                     <div className={Css['search-wrap']}>
                         <div className={Css['search-icon']}></div>
                         <div className={Css['search-text']}>请输入宝贝名称</div>
