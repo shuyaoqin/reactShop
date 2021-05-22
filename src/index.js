@@ -2,10 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import RouterComponent from './router';
 import "./assets/css/common/public.css";
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+import reducers from './reducers';
+
+let store = createStore(reducers);
+
+class Index extends React.Component {
+  render() {
+    return (
+      <React.Fragment>
+        <Provider store={store}>
+          <RouterComponent />
+        </Provider>
+      </React.Fragment>
+    )
+  }
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <RouterComponent />
+    <Index />
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -5,7 +5,7 @@
 .bottom-nav ul li{width:1.4rem;height:1.4rem;margin:0 auto;}
 .bottom-nav ul li.home{background-image:url("../../../images/common/home1.png");background-size:100%;background-repeat: no-repeat;background-position: center;}
 .bottom-nav ul li.home.active{background-image:url("../../../images/common/home2.png");background-size:100%;background-repeat: no-repeat;background-position: center;}
-.bottom-nav ul li.text{font-size:0.6rem;text-align:center;}
+.bottom-nav ul li.text{font-size:0.6rem;text-align:center;width:auto;}
 .bottom-nav ul li.text.active{color:#EB1625}
 .bottom-nav ul li.cart{background-image:url("../../../images/common/cart1.png");background-size:100%;background-repeat: no-repeat;background-position: center;}
 .bottom-nav ul li.cart.active{background-image:url("../../../images/common/cart2.png");background-size:100%;background-repeat: no-repeat;background-position: center;}
