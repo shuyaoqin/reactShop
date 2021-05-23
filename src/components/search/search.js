@@ -1,10 +1,12 @@
 import React from "react";
+import {withRouter} from 'react-router';
 import config from '../../assets/js/conf/config';
 import {request} from "../../assets/js/libs/request";
 import Css from './search.css';
 import {Modal} from 'antd-mobile';
 import {connect} from 'react-redux';
 import action from '../../actions/index';
+import { Toast } from 'antd-mobile';
 
 class SearchComponent extends React.Component {
     constructor(props) {
@@ -24,6 +26,7 @@ class SearchComponent extends React.Component {
         }
         this.getHotKeywords();
     }
+    // 获取热门搜索关键词
     getHotKeywords() {
         request(config.baseUrl + '/api/home/public/hotwords?token=' + config.token).then(res => {
             if (res.code === 200) {
@@ -39,22 +42,34 @@ class SearchComponent extends React.Component {
             { text: '确认', onPress: () => {
                 this.setState({bHistory: false});
                 localStorage.removeItem('hk');
+                this.props.dispatch(action.hk.addHistoryKeywords({keywords: []}));
                 this.aKeywords = [];
-                this.props.dispatch({type: 'addHK', keywords: []});
             }},
         ]);
     }
     addHistoryKeywords() {
-        for(let i = 0; i < this.aKeywords.length; i++) {
-            if(this.aKeywords[i] === this.state.keywords) {
-                this.aKeywords.splice(i--, 1)
+        let keywords = this.state.keywords || this.props.keywords;
+        if (this.refs['keywords'].value !== '') {
+            for(let i = 0; i < this.aKeywords.length; i++) {
+                if(this.aKeywords[i] === this.state.keywords) {
+                    this.aKeywords.splice(i--, 1)
+                }
             }
+            this.aKeywords.unshift(keywords);
+            localStorage['hk'] = JSON.stringify(this.aKeywords);
+            this.props.dispatch(action.hk.addHistoryKeywords({keywords: this.aKeywords}));
+            this.setState({bHistory: true});
+            this.goPage('goods/search?keywords=' + keywords, keywords);
+        } else {
+            Toast.info('请输入宝贝名称', 2)
         }
-        this.aKeywords.unshift(this.state.keywords);
-        localStorage['hk'] = JSON.stringify(this.aKeywords);
-        this.props.dispatch(action.hk.addHistoryKeywords({keywords: this.aKeywords}));
-        this.setState({bHistory: true});
-        console.log(this.props.state.hk.keywords);
+    }
+    goPage(url, keywords) {
+        if (this.props.isLocal === '1') {
+            this.props.childKeywords(keywords);
+        } else {
+            this.props.history.push(config.path + url);
+        }
     }
     render(){
         return(
@@ -63,7 +78,7 @@ class SearchComponent extends React.Component {
                     <div className={Css['close']} onClick={this.props.childStyle.bind(this, {display: 'none'})}></div>
                     <div className={Css['search-wrap']}>
                     <div className={Css['search-input-wrap']}>
-                        <input type="text" className={Css['search']} placeholder="请输入宝贝名称" onChange={(e) => this.setState({keywords: e.target.value})} />
+                        <input type="text" className={Css['search']} placeholder="请输入宝贝名称" defaultValue={this.props.keywords} onChange={(e) => this.setState({keywords: e.target.value})} ref="keywords" />
                     </div>
                         <button type="button" className={Css['search-btn']} onClick={this.addHistoryKeywords.bind(this)}></button>
                     </div>
@@ -77,7 +92,7 @@ class SearchComponent extends React.Component {
                         {
                             this.props.state.hk.keywords !== null ?
                             this.props.state.hk.keywords.map((item, index) => {
-                                return <div className={Css['keywords']} key={index}>{item}</div>
+                                return <div className={Css['keywords']} key={index} onClick={this.goPage.bind(this, 'goods/search?keywords=' + item, item)}>{item}</div>
                             }) : ''
                         }
                     </div>
@@ -91,7 +106,7 @@ class SearchComponent extends React.Component {
                         {
                             this.state.aHotKeywords !== null ? this.state.aHotKeywords.map((item, index) => {
                                 return (
-                                    <div className={Css['keywords']}>{item.title}</div>
+                                    <div className={Css['keywords']} onClick={this.goPage.bind(this, 'goods/search?keywords=' + item.title, item.title)}>{item.title}</div>
                                 )
                             }) : ''
                         }
@@ -105,4 +120,4 @@ export default connect((state) => {
     return {
         state: state,
     }
-})(SearchComponent)
+})(withRouter(SearchComponent))

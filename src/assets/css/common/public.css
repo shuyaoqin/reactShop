@@ -15,5 +15,6 @@ html,body {
     font-size: 0.8rem;
     text-align: center;
 }
-.am-modal-body{color: #000 !important;}
-.hide{display: none;}
+.am-modal-body {color: #000 !important;}
+.hide {display: none;}
+.height-hide {height:0px;overflow:hidden;}
