@@ -51,7 +51,7 @@ class SearchComponent extends React.Component {
         let keywords = this.state.keywords || this.props.keywords;
         if (this.refs['keywords'].value !== '') {
             for(let i = 0; i < this.aKeywords.length; i++) {
-                if(this.aKeywords[i] === this.state.keywords) {
+                if(this.aKeywords[i] === keywords) {
                     this.aKeywords.splice(i--, 1)
                 }
             }
