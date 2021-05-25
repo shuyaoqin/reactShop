@@ -109,23 +109,25 @@ export default class GoodsSearch extends React.Component {
     }
     // 向下滚动加载
     getScrollPage() {
-        this.oUpRefresh = new UpRefresh({'curpage': this.curPage, 'maxPage': this.maxPage, 'offsetBottom': this.offsetBottom}, curPage => {
+        this.oUpRefresh = new UpRefresh({'curPage': this.curPage, 'maxPage': this.maxPage, 'offsetBottom': this.offsetBottom}, curPage => {
             let url = config.baseUrl + '/api/home/goods/search?' + this.sParams + '&page=' + curPage + '&token=' + config.token;
-            request(url).then(res => {
+            request(url).then((res) => {
                 if (res.code === 200) {
-                    let aGoods = this.state.aGoods;
-                    for (let i = 0; i < res.data.length; i++) {
-                        aGoods.push(res.data[i]);
+                    if (res.data.length>0){
+                        let aGoods = this.state.aGoods;
+                        for (let i = 0; i < res.data.length; i++) {
+                            aGoods.push(res.data[i]);
+                        }
+                        this.setState({aGoods: aGoods}, () => {
+                            lazyImg();
+                        });
                     }
-                    this.setState({aGoods: aGoods}, () => {
-                        lazyImg();
-                    });
                 }
             })
         })
     }
     setParams() {
-        this.sParams = 'keywords=' + this.sKeywords + '&param=' + this.sParam + '&price1=' + this.fPrice1 + '&price2=' + this.fPrice2 + '&otype=' + this.oType + '&cid=' + this.cid;
+        this.sParams = 'kwords=' + this.sKeywords + '&param=' + this.sParam + '&price1=' + this.fPrice1 + '&price2=' + this.fPrice2 + '&otype=' + this.oType + '&cid=' + this.cid;
     }
     // 获取分类数据
     getClassifyData() {
